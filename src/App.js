@@ -1,21 +1,21 @@
-import logo from './logo.svg';
+import construction from './construction.png'
 import './App.css';
 
 function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
+        <img src={construction} className="App-logo" alt="logo" />
         <p>
-          Edit <code>src/App.js</code> and save to reload.
+          Under Construction. Work in progress...!
         </p>
         <a
           className="App-link"
-          href="https://reactjs.org"
+          href="https://www.chartjs.org/"
           target="_blank"
           rel="noopener noreferrer"
         >
-          Learn React
+          Learn ChartJs
         </a>
       </header>
     </div>
