@@ -1,25 +1,44 @@
 import construction from './construction.png'
 import './App.css';
+import {Chart} from "react-google-charts";
+
+
+const data = [
+    ["Year", "Sales", "Expenses", "Profit"],
+    ["2014", 1000, 400, 200],
+    ["2015", 1170, 460, 250],
+    ["2016", 660, 1120, 300],
+    ["2017", 1030, 540, 350],
+];
+
+const options = {
+    chart: {
+        title: "Company Performance",
+        subtitle: "Sales, Expenses, and Profit: 2014-2017",
+    },
+};
+
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={construction} className="App-logo" alt="logo" />
-        <p>
-          Under Construction. Work in progress...!
-        </p>
-        <a
-          className="App-link"
-          href="https://www.chartjs.org/"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn ChartJs
-        </a>
-      </header>
-    </div>
-  );
+    return (
+        <div className="App">
+            <header className="App-header">
+                <h3>
+                    Google Charts
+                </h3>
+            </header>
+            <div className={"App-body"}>
+                <Chart
+                    chartType="Line"
+                    width="100%"
+                    height="400px"
+                    data={data}
+                    options={options}
+                />
+            </div>
+
+        </div>
+    );
 }
 
 export default App;
