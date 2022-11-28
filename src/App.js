@@ -22,28 +22,43 @@ const options = {
 
 function App() {
 
+    let tempResult = []
     let timeStamp = []
     let finalResults = []
-    let trendingKeywords = []
+    let trendingKeywords = [[]]
+
+    let formatedKeywords ={}
+
 
 
     useEffect(() => {
         let objSize = Object.keys(Data).length;
         for (let i = 1; i <= objSize; i++){
-            console.log(" DATA of index", i ," " , Data[i].time)
-
-
+            // console.log(" DATA of index", i ," " , Data[i].time)
+            // console.log(" DATA of index", i ," " , Data[i]._id)
+            let tempResult = [];
             for(let k = 0; k < Data[i].results.length; k++){
-            console.log(" trending name ", Data[i].results[k].name)
-                trendingKeywords[k] = (Data[i].results[k].name);
+                console.log(" trending name ", Data[i].results[k].name)
+                tempResult.push(Data[i].results[k].name);
             }
-            timeStamp[i] = (Data[i].time);
+
+            formatedKeywords[Data[i]._id] = tempResult
+            formatedKeywords[Data[i]._id].push(Data[i].time)
+
+
+            // for(let k = 0; k < Data[i].results.length; k++){
+            // console.log(" trending name ", Data[i].results[k].name)
+            //     trendingKeywords[k] = (Data[i].results[k].name);
+            // }
+            // timeStamp[i] = (Data[i].time);
             // timeStamp[i].push(trendingKeywords)
         }
-        finalResults.push(trendingKeywords)
+        console.log(" ***** ", formatedKeywords);
+        // finalResults.push(trendingKeywords)
         // finalResults.push(timeStamp)
-        console.log("THIS IS FINAL OBJECT " , timeStamp)
-        console.log("THIS IS FINAL OBJECT " , finalResults)
+        // console.log("THIS IS FINAL OBJECT " , timeStamp)
+        // console.log("THIS IS FINAL OBJECT " , finalResults)
+
     });
 
 
