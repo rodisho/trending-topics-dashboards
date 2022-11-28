@@ -1,43 +1,51 @@
-import construction from './construction.png'
 import './App.css';
 import {Chart} from "react-google-charts";
+import React from "react";
 
+//Need to bring in URL country from some sort of lookup (https://www.iplocation.net/ip-lookup)
+//Then need to create a count statement, to count up the countries and populate them reoccuringly in the format below
 
-const data = [
-    ["Year", "Sales", "Expenses", "Profit"],
-    ["2014", 1000, 400, 200],
-    ["2015", 1170, 460, 250],
-    ["2016", 660, 1120, 300],
-    ["2017", 1030, 540, 350],
+//count the countries and append
+//const arr = [US, JP, NL, IT, CA, GB, CH, DE, SI, IE];
+//const counts = {};
+
+//for (const num of arr) {
+//    counts[num] = counts[num] ? counts[num] + 1 : 1;
+//}
+
+//console.log(counts);
+//console.log(counts[US], counts[JP], counts[NL], counts[IT],  counts[CA], counts[GB], counts[CH], counts[DE], counts[SI], counts[IE],);
+
+export const data = [
+    ["Country", "Popularity"],
+    ["Germany", 200],
+    ["United States", 300],
+    ["Brazil", 400],
+    ["Canada", 500],
+    ["France", 600],
+    ["RU", 700],
 ];
 
-const options = {
-    chart: {
-        title: "Company Performance",
-        subtitle: "Sales, Expenses, and Profit: 2014-2017",
-    },
-};
-
-
-function App() {
+export function App() {
     return (
-        <div className="App">
-            <header className="App-header">
-                <h3>
-                    Google Charts
-                </h3>
-            </header>
-            <div className={"App-body"}>
-                <Chart
-                    chartType="Line"
-                    width="100%"
-                    height="400px"
-                    data={data}
-                    options={options}
-                />
-            </div>
-
-        </div>
+        <Chart
+            chartEvents={[
+                {
+                    eventName: "select",
+                    callback: ({ chartWrapper }) => {
+                        const chart = chartWrapper.getChart();
+                        const selection = chart.getSelection();
+                        if (selection.length === 0) return;
+                        const region = data[selection[0].row + 1];
+                        console.log("Selected : " + region);
+                    },
+                },
+            ]}
+            chartType="GeoChart"
+            width="100%"
+            height="400px"
+            data={data}
+        />
     );
 }
 
