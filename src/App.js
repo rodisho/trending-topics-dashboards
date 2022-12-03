@@ -79,7 +79,6 @@ function App() {
                         </TableHead>
                         <TableBody>
                             {
-
                                 formatedKeywords.map((formatedKeyword) => (
                                 <TableRow
                                     key={formatedKeyword.id}
@@ -91,9 +90,7 @@ function App() {
                                     <TableCell align="right">RAFI</TableCell>
                                     <TableCell align="right">RAFI</TableCell>
                                 </TableRow>
-                            ))
-
-                            }
+                            ))}
                         </TableBody>
                     </Table>
                 </TableContainer>
