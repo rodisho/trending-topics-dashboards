@@ -17,7 +17,7 @@ import React from "react";
 //console.log(counts[US], counts[JP], counts[NL], counts[IT],  counts[CA], counts[GB], counts[CH], counts[DE], counts[SI], counts[IE],);
 
 export const data = [
-    ["Country", "Popularity"],
+    ["Country", "Malicious IP Hits"],
     ["Germany", 200],
     ["United States", 300],
     ["Brazil", 400],
@@ -28,24 +28,26 @@ export const data = [
 
 export function App() {
     return (
-        <Chart
-            chartEvents={[
-                {
-                    eventName: "select",
-                    callback: ({ chartWrapper }) => {
-                        const chart = chartWrapper.getChart();
-                        const selection = chart.getSelection();
-                        if (selection.length === 0) return;
-                        const region = data[selection[0].row + 1];
-                        console.log("Selected : " + region);
+        <div class="center">
+            <Chart
+                chartEvents={[
+                    {
+                        eventName: "select",
+                        callback: ({ chartWrapper }) => {
+                            const chart = chartWrapper.getChart();
+                            const selection = chart.getSelection();
+                            if (selection.length === 0) return;
+                            const region = data[selection[0].row + 1];
+                            console.log("Selected : " + region);
+                        },
                     },
-                },
-            ]}
-            chartType="GeoChart"
-            width="100%"
-            height="400px"
-            data={data}
-        />
+                ]}
+                chartType="GeoChart"
+                width="100%"
+                height="400px"
+                data={data}
+            />
+        </div>
     );
 }
 
