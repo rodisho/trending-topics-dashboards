@@ -2,7 +2,9 @@ import construction from './construction.png'
 import './App.css';
 import {Chart} from "react-google-charts";
 import React, { useState, useEffect } from 'react';
-import Data from './google-data.json'
+import GoogleData from './db/google_trends_formatted.json'
+import TwitterData from './db/twitter_trends_formatted.json'
+import VTData from './db/virus_total_results_formatted.json'
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -10,14 +12,9 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
+import MainBody from './components/mainBody'
 
-const data = [
-    ["Year", "Sales", "Expenses", "Profit"],
-    ["2014", 1000, 400, 200],
-    ["2015", 1170, 460, 250],
-    ["2016", 660, 1120, 300],
-    ["2017", 1030, 540, 350],
-];
+
 
 const options = {
     chart: {
@@ -28,21 +25,13 @@ const options = {
 
 function App() {
 
-    let tempResult = []
-    let timeStamp = []
-    let finalResults = []
-    let trendingKeywords = [[]]
-
-    let formatedKeywords =[{}]
-
-
+    let trendingKeywords = [];
 
     useEffect(() => {
-        let objSize = Object.keys(Data).length;
+        let objSize = Object.keys(GoogleData).length;
         for (let i = 1; i <= objSize; i++){
             let tempResult = [];
             for(let k = 0; k < Data[i].results.length; k++){
-                console.log(" trending name ", Data[i].results[k].name)
                 tempResult.push(Data[i].results[k].name);
             }
             formatedKeywords[Data[i]._id] = tempResult
@@ -110,6 +99,7 @@ function App() {
                 {/*    options={options}*/}
                 {/*/>*/}
             </div>
+            <MainBody></MainBody>
 
         </div>
     );
