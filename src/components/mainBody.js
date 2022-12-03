@@ -1,6 +1,5 @@
 import React from 'react';
 import {Grid, Paper} from '@mui/material';
-import {red} from "@mui/material/colors";
 import Container from '@mui/material/Container';
 
 
