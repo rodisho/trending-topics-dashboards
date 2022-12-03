@@ -3,8 +3,6 @@ import './App.css';
 import {Chart} from "react-google-charts";
 import MainBody from './components/mainBody'
 
-
-
 const options = {
     chart: {
         title: "Company Performance",
