@@ -114,7 +114,7 @@ function App() {
         <div className="App">
             <header className="App-header">
                 <h3>
-                    Trending Topics
+                    Trending Topic Weaponization Dashboard
                 </h3>
             </header>
             <div className="center">
