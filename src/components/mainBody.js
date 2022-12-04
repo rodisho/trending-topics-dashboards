@@ -3,50 +3,58 @@ import {Grid, Paper} from '@mui/material';
 import Container from '@mui/material/Container';
 
 
+
 const MainBody = () => {
 
     return (
         <div>
-            <Container maxWidth="90%" style={{padding: "20px"}}>
-                <Grid container>
-                    <Grid item xs={12} sm={12} md={12} style={{padding: "5px"}}>
-                        <Paper sx={{
-                            height: 500,
-                            backgroundColor: '#cb7a3c',
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                        }}>1 ITEM</Paper>
-                    </Grid>
-                    <Grid item xs={12} sm={12} md={12} style={{padding: "5px"}}>
-                        <Paper sx={{
-                            height: 400,
-                            backgroundColor: '#9e5f2f',
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                        }}>2 ITEM</Paper>
-                    </Grid>
-                    <Grid item xs={12} sm={12} md={12} style={{padding: "5px"}}>
-                        <Paper sx={{
-                            height: 300,
-                            backgroundColor: '#714422',
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                        }}>3 ITEM</Paper>
-                    </Grid>
-                    <Grid item xs={12} sm={12} md={12} style={{padding: "5px"}}>
-                        <Paper sx={{
-                            height: 200,
-                            backgroundColor: '#2d1b0d',
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                        }}>4 ITEM</Paper>
-                    </Grid>
+            <Grid container>
+                <Grid item xs={12} sm={12} md={12}>
+                    <Paper sx={{
+                        height: 40,
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                    }}>
+                        <div class="time-picker-wrapper">
+                            <label for='start'>Time Period Start:</label>
+                            <input type="date" id="start" name="data-start" placeholder="2018-07-22" min="2018-01-01" max="2018-12-31"></input>
+                        </div>
+                        <div class="time-picker-wrapper">
+                            <label for='end'>Time Period End:</label>
+                            <input type="date" id="end" name="data-end" placeholder="2018-07-22" min="2018-01-01" max="2018-12-31"></input>
+                        </div>
+                    </Paper>
                 </Grid>
-            </Container>
+                <Grid item xs={12} sm={12} md={12}>
+                    <Paper sx={{
+                        height: 400,
+                        backgroundColor: '#9e5f2f',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                    }}>
+                    </Paper>
+                </Grid>
+                <Grid item xs={12} sm={12} md={12}>
+                    <Paper sx={{
+                        height: 300,
+                        backgroundColor: '#714422',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                    }}>3 ITEM</Paper>
+                </Grid>
+                <Grid item xs={12} sm={12} md={12}>
+                    <Paper sx={{
+                        height: 200,
+                        backgroundColor: '#2d1b0d',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                    }}>4 ITEM</Paper>
+                </Grid>
+            </Grid>
         </div>
     );
 };
