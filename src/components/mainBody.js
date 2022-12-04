@@ -9,8 +9,7 @@ const MainBody = () => {
             <Grid container>
                 <Grid item xs={12} sm={12} md={12}>
                     <Paper sx={{
-                        height: 500,
-                        backgroundColor: '#cb7a3c',
+                        height: 40,
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center',
