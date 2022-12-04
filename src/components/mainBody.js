@@ -2,6 +2,7 @@ import React from 'react';
 import  {Grid, Paper }   from '@mui/material';
 import {red} from "@mui/material/colors";
 
+
 const MainBody = () => {
     return (
         <div>
@@ -13,7 +14,16 @@ const MainBody = () => {
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center',
-                    }}>1 ITEM</Paper>
+                    }}>
+                        <div class="time-picker-wrapper">
+                            <label for='start'>Time Period Start:</label>
+                            <input type="date" id="start" name="data-start" placeholder="2018-07-22" min="2018-01-01" max="2018-12-31"></input>
+                        </div>
+                        <div class="time-picker-wrapper">
+                            <label for='end'>Time Period End:</label>
+                            <input type="date" id="end" name="data-end" placeholder="2018-07-22" min="2018-01-01" max="2018-12-31"></input>
+                        </div>
+                    </Paper>
                 </Grid>
                 <Grid item xs={12} sm={12} md={12}>
                     <Paper sx={{
@@ -22,7 +32,8 @@ const MainBody = () => {
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center',
-                    }}>2 ITEM</Paper>
+                    }}>
+                    </Paper>
                 </Grid>
                 <Grid item xs={12} sm={12} md={12}>
                     <Paper sx={{

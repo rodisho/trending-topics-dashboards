@@ -16,9 +16,6 @@ import MainBody from './components/mainBody'
 //Need to bring in URL country from some sort of lookup (https://www.iplocation.net/ip-lookup)
 //Then need to create a count statement, to count up the countries and populate them reoccuringly in the format below
 
-//count the countries and append
-//const arr = [US, JP, NL, IT, CA, GB, CH, DE, SI, IE];
-//const counts = {};
 
 //for (const num of arr) {
 //    counts[num] = counts[num] ? counts[num] + 1 : 1;
@@ -137,6 +134,7 @@ function App() {
                         data={countrydata}
                     />
                 </div>
+                <MainBody></MainBody>
             <div className={"App-body"}>
                 <TableContainer component={Paper}>
                     <Table sx={{ minWidth: 650 }} aria-label="simple table">
@@ -180,7 +178,6 @@ function App() {
                 {/*    options={options}*/}
                 {/*/>*/}
             </div>
-            <MainBody></MainBody>
             </div>
     );
 }
