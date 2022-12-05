@@ -12,6 +12,9 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import MainBody from './components/mainBody'
+import {Container} from "@mui/material";
+import Divider from '@mui/material/Divider';
+import Chip from '@mui/material/Chip';
 
 //Need to bring in URL country from some sort of lookup (https://www.iplocation.net/ip-lookup)
 //Then need to create a count statement, to count up the countries and populate them reoccuringly in the format below
@@ -22,11 +25,12 @@ import MainBody from './components/mainBody'
 //}
 
 function preprocessData() {
-    let trendingKeywords = [];
+    let trendingKeywordsGoogle = [];
+    let trendingKeywordsTwitter = [];
 
 
     // Format Google Keywords and normalize data
-    trendingKeywords = [];
+    trendingKeywordsGoogle = [];
     let objSize = Object.keys(GoogleData).length;
     for(let i = 1; i < objSize; i++){
         for(let k = 1; k < GoogleData[i]['results'].length; k++) {
@@ -43,7 +47,7 @@ function preprocessData() {
                     }
                 }
             }
-            trendingKeywords.push({'keyword': GoogleData[i]['results'][k]['name'], 'platform': 'Google', 'timestamp': GoogleData[i]['time'], 'malicious_urls': vtResults})
+            trendingKeywordsGoogle.push({'keyword': GoogleData[i]['results'][k]['name'], 'platform': 'Google', 'timestamp': GoogleData[i]['time'], 'malicious_urls': vtResults})
         }
     }
     // Format Twitter Keywords and normalize data
@@ -63,10 +67,10 @@ function preprocessData() {
                     }
                 }
             }
-            trendingKeywords.push({'keyword': TwitterData[i]['results'][k]['name'], 'platform': 'Google', 'timestamp': TwitterData[i]['time'], 'malicious_urls': vtResults})
+            trendingKeywordsTwitter.push({'keyword': TwitterData[i]['results'][k]['name'], 'platform': 'Twitter', 'timestamp': TwitterData[i]['time'], 'malicious_urls': vtResults})
         }
     }
-    return trendingKeywords;
+    return [trendingKeywordsGoogle, trendingKeywordsTwitter];
 }
 
 function compileIpInfo() {
@@ -100,13 +104,12 @@ function compileIpInfo() {
 }
 
 function App() {
-    let trendingKeywords = preprocessData();
+    let [googleTrendingKeywords, twitterTrendingKeywords] = preprocessData();
     let countries = compileIpInfo();
     let countrydata = [['Country', 'Malicious IP Hits']];
     for(const [key, value] of Object.entries(countries)) {
         countrydata.push([key, value])
     }
-    console.log(countrydata)
     return (
         <div className="App">
             <header className="App-header">
@@ -115,6 +118,9 @@ function App() {
                 </h3>
             </header>
             <div className="center">
+                <Divider style={{paddingTop: "50px"}}>
+                    <Chip label="GEOMAP" />
+                </Divider>
                     <Chart
                         chartEvents={[
                             {
@@ -124,7 +130,6 @@ function App() {
                                     const selection = chart.getSelection();
                                     if (selection.length === 0) return;
                                     const region = countrydata[selection[0].row + 1];
-                                    console.log("Selected : " + region);
                                 },
                             },
                         ]}
@@ -135,42 +140,78 @@ function App() {
                         mapsApiKey="AIzaSyDAV8XexOIHjguK2nHxQv1ihqjZUtexhNk"
                     />
                 </div>
-                <MainBody></MainBody>
-            <div className={"App-body"}>
-                <TableContainer component={Paper}>
-                    <Table sx={{ minWidth: 650 }} aria-label="simple table">
-                        <TableHead>
-                            <TableRow>
-                                <TableCell>Keyword</TableCell>
-                                <TableCell align="right">Time</TableCell>
-                                <TableCell align="right">Platform</TableCell>
-                            </TableRow>
-                        </TableHead>
-                        <TableBody>
-                        
-                            
-                            {trendingKeywords.map((el, index) => 
-                                <TableRow
-                                    key={index}
-                                    sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                                >
-                                    <TableCell key={el.keyword} component="th" scope="row">
-                                        {el.keyword}
-                                    </TableCell>
-                                    <TableCell align="right">{el.timestamp}</TableCell>
-                                    <TableCell align="right">{el.platform}</TableCell>
+                {/*<MainBody></MainBody>*/}
+            {/*<div className={"App-body"}>*/}
+            {/*    <Divider/>*/}
+                <Divider style={{paddingTop: "100px"}}>
+                    <Chip label="GOOGLE TRENDING TABLE" />
+                </Divider>
+                <Container style={{maxWidth: "80%", padding: "5px"}}>
+                    <TableContainer component={Paper} sx={{
+                        height: 700
+                    }}>
+                        <Table sx={{ minWidth: 650}} aria-label="simple table" stickyHeader >
+                            <TableHead>
+                                <TableRow>
+                                    <TableCell style={{backgroundColor: "#989fab"}}>Keyword</TableCell>
+                                    <TableCell style={{backgroundColor: "#989fab"}} align="right">Time</TableCell>
+                                    <TableCell style={{backgroundColor: "#989fab"}} align="right">Platform</TableCell>
                                 </TableRow>
-                            )}
-                            
-                            
-                        </TableBody>
-                    </Table>
-                </TableContainer>
+                            </TableHead>
+                            <TableBody>
+                                {googleTrendingKeywords.map((el, index) =>
+                                    <TableRow
+                                        key={index}
+                                        sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                                    >
+                                        <TableCell key={el.keyword} component="th" scope="row">
+                                            {el.keyword}
+                                        </TableCell>
+                                        <TableCell align="right">{el.timestamp}</TableCell>
+                                        <TableCell align="right">{el.platform}</TableCell>
+                                    </TableRow>
+                                )}
+                            </TableBody>
+                        </Table>
+                    </TableContainer>
+                </Container>
+                <Divider/>
+                <Divider style={{paddingTop: "100px"}}>
+                    <Chip label="TWITTER TRENDING TABLE" />
+                </Divider>
+                <Container style={{maxWidth: "80%", padding: "5px"}}>
+                    <TableContainer component={Paper} sx={{
+                        height: 700
+                    }}>
+                        <Table sx={{ minWidth: 650}} aria-label="simple table" stickyHeader >
+                            <TableHead>
+                                <TableRow>
+                                    <TableCell style={{backgroundColor: "#989fab"}}>Keyword</TableCell>
+                                    <TableCell style={{backgroundColor: "#989fab"}} align="right">Time</TableCell>
+                                    <TableCell style={{backgroundColor: "#989fab"}} align="right">Platform</TableCell>
+                                </TableRow>
+                            </TableHead>
+                            <TableBody>
+                                {twitterTrendingKeywords.map((el, index) =>
+                                    <TableRow
+                                        key={index}
+                                        sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                                    >
+                                        <TableCell key={el.keyword} component="th" scope="row">
+                                            {el.keyword}
+                                        </TableCell>
+                                        <TableCell align="right">{el.timestamp}</TableCell>
+                                        <TableCell align="right">{el.platform}</TableCell>
 
 
+                                    </TableRow>
+                                )}
 
 
-
+                            </TableBody>
+                        </Table>
+                    </TableContainer>
+                </Container>
                 {/*<Chart*/}
                 {/*    chartType="Line"*/}
                 {/*    width="100%"*/}
@@ -178,7 +219,7 @@ function App() {
                 {/*    data={data}*/}
                 {/*    options={options}*/}
                 {/*/>*/}
-            </div>
+            {/*</div>*/}
             </div>
     );
 }
