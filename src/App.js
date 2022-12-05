@@ -110,7 +110,6 @@ function App() {
     for(const [key, value] of Object.entries(countries)) {
         countrydata.push([key, value])
     }
-    console.log(countrydata)
     return (
         <div className="App">
             <header className="App-header">
@@ -119,7 +118,7 @@ function App() {
                 </h3>
             </header>
             <div className="center">
-                <Divider>
+                <Divider style={{paddingTop: "50px"}}>
                     <Chip label="GEOMAP" />
                 </Divider>
                     <Chart
@@ -131,7 +130,6 @@ function App() {
                                     const selection = chart.getSelection();
                                     if (selection.length === 0) return;
                                     const region = countrydata[selection[0].row + 1];
-                                    console.log("Selected : " + region);
                                 },
                             },
                         ]}
@@ -143,16 +141,16 @@ function App() {
                     />
                 </div>
                 {/*<MainBody></MainBody>*/}
-            <div className={"App-body"}>
-                <Divider/>
-                <Divider>
+            {/*<div className={"App-body"}>*/}
+            {/*    <Divider/>*/}
+                <Divider style={{paddingTop: "100px"}}>
                     <Chip label="GOOGLE TRENDING TABLE" />
                 </Divider>
                 <Container style={{maxWidth: "80%", padding: "5px"}}>
                     <TableContainer component={Paper} sx={{
                         height: 700
                     }}>
-                        <Table sx={{ minWidth: 650}} aria-label="simple table">
+                        <Table sx={{ minWidth: 650}} aria-label="simple table" stickyHeader >
                             <TableHead>
                                 <TableRow>
                                     <TableCell style={{backgroundColor: "#989fab"}}>Keyword</TableCell>
@@ -171,25 +169,21 @@ function App() {
                                         </TableCell>
                                         <TableCell align="right">{el.timestamp}</TableCell>
                                         <TableCell align="right">{el.platform}</TableCell>
-
-
                                     </TableRow>
                                 )}
-
-
                             </TableBody>
                         </Table>
                     </TableContainer>
                 </Container>
                 <Divider/>
-                <Divider>
+                <Divider style={{paddingTop: "100px"}}>
                     <Chip label="TWITTER TRENDING TABLE" />
                 </Divider>
                 <Container style={{maxWidth: "80%", padding: "5px"}}>
                     <TableContainer component={Paper} sx={{
                         height: 700
                     }}>
-                        <Table sx={{ minWidth: 650}} aria-label="simple table">
+                        <Table sx={{ minWidth: 650}} aria-label="simple table" stickyHeader >
                             <TableHead>
                                 <TableRow>
                                     <TableCell style={{backgroundColor: "#989fab"}}>Keyword</TableCell>
@@ -218,10 +212,6 @@ function App() {
                         </Table>
                     </TableContainer>
                 </Container>
-
-
-
-
                 {/*<Chart*/}
                 {/*    chartType="Line"*/}
                 {/*    width="100%"*/}
@@ -229,7 +219,7 @@ function App() {
                 {/*    data={data}*/}
                 {/*    options={options}*/}
                 {/*/>*/}
-            </div>
+            {/*</div>*/}
             </div>
     );
 }
