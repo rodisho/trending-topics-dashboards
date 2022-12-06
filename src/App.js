@@ -202,7 +202,7 @@ function App() {
                     />
                 </div>
                 {/*<MainBody></MainBody>*/}
-                <Divider>
+                <Divider style={{paddingTop: "100px"}}>
                     <Chip label="MALICIOUS URLS OVER TIME" />
                 </Divider>
                 <Chart
@@ -212,7 +212,7 @@ function App() {
                     data={maliciousHitsByDay}
                     options={options}
                     />
-            <div className={"App-body"}>
+            <div className={"App-body"} style={{paddingTop: "100px"}}>
                 <Divider/>
                 <Divider style={{paddingTop: "100px"}}>
                     <Chip label="GOOGLE TRENDING TABLE" />
