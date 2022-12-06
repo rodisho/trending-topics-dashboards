@@ -38,29 +38,29 @@ function preprocessData() {
         for(let k = 1; k < GoogleData[i]['results'].length; k++) {
             let vtResults = [];
             let GoogleTerm = GoogleData[i]['results'][k];
+            var [keyword_in_content, keyword_in_metadata_description, keyword_in_outgoing_links] = ['False', 'False', 'False'];
             for(let j = 1; j < Object.keys(VTData).length; j++) {
                 if(GoogleData[i]['_id'] === VTData[j]['origin']) {
                     for(const [key, value] of Object.entries(VTData[j]['results'])) {
                         if(key.includes(GoogleTerm['name'])){
                             if(value['suspicious'] > 0 || value['malicious'] > 0) {
                                 vtResults.push(value);
+                                Object.keys(MetaData).forEach(metadatakey => {
+                                    if(metadatakey.includes(GoogleTerm['name'])) {
+                                        if(MetaData[metadatakey]['in_page_source']) {
+                                            keyword_in_content = 'True';
+                                        } else if (MetaData[metadatakey]['in_metadata_description']) {
+                                            keyword_in_metadata_description = 'True';
+                                        } else if (MetaData[metadatakey]['in_outgoing_links']) {
+                                            keyword_in_outgoing_links = 'True';
+                                        }
+                                    }
+                                });
                             }
                         }
                     }
                 }
             }
-            var [keyword_in_content, keyword_in_metadata_description, keyword_in_outgoing_links] = ['False', 'False', 'False'];
-            Object.keys(MetaData).forEach(key => {
-                if(GoogleData[i]['results'][k]['name'].includes(MetaData[key])) {
-                    if(MetaData[key]['in_page_source']) {
-                        keyword_in_content = 'True';
-                    } else if (MetaData[key]['in_metadata_description']) {
-                        keyword_in_metadata_description = 'True';
-                    } else if (MetaData[key]['in_outgoing_links']) {
-                        keyword_in_outgoing_links = 'True';
-                    }
-                }
-            });
             trendingKeywordsGoogle.push({'keyword': GoogleData[i]['results'][k]['name'], 'platform': 'Google', 'timestamp': GoogleData[i]['time'], 'malicious_urls': vtResults, 'keyword_in_content': keyword_in_content, 'keyword_in_metadata_description': keyword_in_metadata_description, 'keyword_in_outgoing_links': keyword_in_outgoing_links});
         }
     }
@@ -68,6 +68,7 @@ function preprocessData() {
     objSize = Object.keys(TwitterData).length;
     for(let i = 1; i < objSize; i++){
         for(let k = 1; k < TwitterData[i]['results'].length; k++) {
+            var [keyword_in_content, keyword_in_metadata_description, keyword_in_outgoing_links] = ['False', 'False', 'False'];
             let vtResults = [];
             let GoogleTerm = TwitterData[i]['results'][k];
             for(let j = 1; j < Object.keys(VTData).length; j++) {
@@ -76,25 +77,22 @@ function preprocessData() {
                         if(key.includes(GoogleTerm['name'])){
                             if(value['suspicious'] > 0 || value['malicious'] > 0) {
                                 vtResults.push(value);
+                                Object.keys(MetaData).forEach(metadatakey => {
+                                    if(metadatakey.includes(GoogleTerm['name'])) {
+                                        if(MetaData[metadatakey]['in_page_source']) {
+                                            keyword_in_content = 'True';
+                                        } else if (MetaData[metadatakey]['in_metadata_description']) {
+                                            keyword_in_metadata_description = 'True';
+                                        } else if (MetaData[metadatakey]['in_outgoing_links']) {
+                                            keyword_in_outgoing_links = 'True';
+                                        }
+                                    }
+                                });
                             }
                         }
                     }
                 }
             }
-            var [keyword_in_content, keyword_in_metadata_description, keyword_in_outgoing_links] = ['False', 'False', 'False'];
-            vtResults.forEach(result => {
-                Object.keys(MetaData).forEach(key => {
-                    if(result == MetaData[key]) {
-                        if(MetaData[key]['in_page_source']) {
-                            keyword_in_content = 'True';
-                        } else if (MetaData[key]['in_metadata_description']) {
-                            keyword_in_metadata_description = 'True';
-                        } else if (MetaData[key]['in_outgoing_links']) {
-                            keyword_in_outgoing_links = 'True';
-                        }
-                    }
-                });
-            });
             trendingKeywordsTwitter.push({'keyword': TwitterData[i]['results'][k]['name'], 'platform': 'Twitter', 'timestamp': TwitterData[i]['time'], 'malicious_urls': vtResults, 'keyword_in_content': keyword_in_content, 'keyword_in_metadata_description': keyword_in_metadata_description, 'keyword_in_outgoing_links': keyword_in_outgoing_links});
         }
     }
@@ -200,7 +198,7 @@ function App() {
                         width="100%"
                         height="400px"
                         data={countrydata}
-                        mapsApiKey="AIzaSyDAV8XexOIHjguK2nHxQv1ihqjZUtexhNk"
+                        // mapsApiKey="AIzaSyDAV8XexOIHjguK2nHxQv1ihqjZUtexhNk"
                     />
                 </div>
                 {/*<MainBody></MainBody>*/}
