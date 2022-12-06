@@ -198,7 +198,7 @@ function App() {
                         width="100%"
                         height="400px"
                         data={countrydata}
-                        mapsApiKey="AIzaSyDAV8XexOIHjguK2nHxQv1ihqjZUtexhNk"
+                        mapsApiKey="INSERT KEY HERE"
                     />
                 </div>
                 {/*<MainBody></MainBody>*/}
