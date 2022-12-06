@@ -181,7 +181,7 @@ function App() {
                 </h3>
             </header>
             <div className="center">
-                <Divider>
+                <Divider style={{paddingTop: "50px"}}>
                     <Chip label="GEOMAP" />
                 </Divider>
                     <Chart
@@ -200,7 +200,7 @@ function App() {
                         width="100%"
                         height="400px"
                         data={countrydata}
-                        // mapsApiKey="AIzaSyDAV8XexOIHjguK2nHxQv1ihqjZUtexhNk"
+                        mapsApiKey="AIzaSyDAV8XexOIHjguK2nHxQv1ihqjZUtexhNk"
                     />
                 </div>
                 {/*<MainBody></MainBody>*/}
@@ -216,14 +216,14 @@ function App() {
                     />
             <div className={"App-body"}>
                 <Divider/>
-                <Divider>
+                <Divider style={{paddingTop: "100px"}}>
                     <Chip label="GOOGLE TRENDING TABLE" />
                 </Divider>
                 <Container style={{maxWidth: "80%", padding: "5px"}}>
                     <TableContainer component={Paper} sx={{
                         height: 700
                     }}>
-                        <Table sx={{ minWidth: 400}} aria-label="simple table">
+                        <Table sx={{ minWidth: 400}} aria-label="simple table" stickyHeader>
                             <TableHead>
                                 <TableRow>
                                     <TableCell style={{backgroundColor: "#989fab"}} align="right">Keyword</TableCell>
@@ -248,21 +248,19 @@ function App() {
                                         <TableCell align="right">{el.keyword_in_outgoing_links}</TableCell>
                                     </TableRow>
                                 )}
-
-
                             </TableBody>
                         </Table>
                     </TableContainer>
                 </Container>
                 <Divider/>
-                <Divider>
+                <Divider style={{paddingTop: "100px"}}>
                     <Chip label="TWITTER TRENDING TABLE" />
                 </Divider>
                 <Container style={{maxWidth: "80%", padding: "5px"}}>
                     <TableContainer component={Paper} sx={{
                         height: 700
                     }}>
-                        <Table sx={{ minWidth: 400}} aria-label="simple table">
+                        <Table sx={{ minWidth: 400}} aria-label="simple table" stickyHeader>
                             <TableHead>
                                 <TableRow>
                                     <TableCell style={{backgroundColor: "#989fab"}}>Keyword</TableCell>
@@ -293,10 +291,6 @@ function App() {
                         </Table>
                     </TableContainer>
                 </Container>
-
-
-
-
                 {/*<Chart*/}
                 {/*    chartType="Line"*/}
                 {/*    width="100%"*/}
@@ -304,6 +298,7 @@ function App() {
                 {/*    data={data}*/}
                 {/*    options={options}*/}
                 {/*/>*/}
+            {/*</div>*/}
             </div>
             </div>
     );

@@ -7,3 +7,5 @@
 ##### 3- GitHub bash tools ( terminal & command interactions )
 
 Once you clone the project from the main repository and open it with your IDE - make sure to execute `npm install` in order for the application to pull all dependencies associated 
+
+### After each commit and push to github repo a hook will be triggered and changes will be deployed to Netlify cloud platform
