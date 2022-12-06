@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import GoogleData from './db/google_trends_formatted.json';
 import TwitterData from './db/twitter_trends_formatted.json';
 import VTData from './db/virus_total_results_formatted_embedded_ips.json';
+import MetaData from './db/keywords_metadata.json';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -15,6 +16,7 @@ import MainBody from './components/mainBody'
 import {Container} from "@mui/material";
 import Divider from '@mui/material/Divider';
 import Chip from '@mui/material/Chip';
+import { isCompositeComponent } from 'react-dom/test-utils';
 
 //Need to bring in URL country from some sort of lookup (https://www.iplocation.net/ip-lookup)
 //Then need to create a count statement, to count up the countries and populate them reoccuringly in the format below
@@ -47,7 +49,19 @@ function preprocessData() {
                     }
                 }
             }
-            trendingKeywordsGoogle.push({'keyword': GoogleData[i]['results'][k]['name'], 'platform': 'Google', 'timestamp': GoogleData[i]['time'], 'malicious_urls': vtResults})
+            var [keyword_in_content, keyword_in_metadata_description, keyword_in_outgoing_links] = ['False', 'False', 'False'];
+            Object.keys(MetaData).forEach(key => {
+                if(GoogleData[i]['results'][k]['name'].includes(MetaData[key])) {
+                    if(MetaData[key]['in_page_source']) {
+                        keyword_in_content = 'True';
+                    } else if (MetaData[key]['in_metadata_description']) {
+                        keyword_in_metadata_description = 'True';
+                    } else if (MetaData[key]['in_outgoing_links']) {
+                        keyword_in_outgoing_links = 'True';
+                    }
+                }
+            });
+            trendingKeywordsGoogle.push({'keyword': GoogleData[i]['results'][k]['name'], 'platform': 'Google', 'timestamp': GoogleData[i]['time'], 'malicious_urls': vtResults, 'keyword_in_content': keyword_in_content, 'keyword_in_metadata_description': keyword_in_metadata_description, 'keyword_in_outgoing_links': keyword_in_outgoing_links});
         }
     }
     // Format Twitter Keywords and normalize data
@@ -67,7 +81,21 @@ function preprocessData() {
                     }
                 }
             }
-            trendingKeywordsTwitter.push({'keyword': TwitterData[i]['results'][k]['name'], 'platform': 'Twitter', 'timestamp': TwitterData[i]['time'], 'malicious_urls': vtResults})
+            var [keyword_in_content, keyword_in_metadata_description, keyword_in_outgoing_links] = ['False', 'False', 'False'];
+            vtResults.forEach(result => {
+                Object.keys(MetaData).forEach(key => {
+                    if(result == MetaData[key]) {
+                        if(MetaData[key]['in_page_source']) {
+                            keyword_in_content = 'True';
+                        } else if (MetaData[key]['in_metadata_description']) {
+                            keyword_in_metadata_description = 'True';
+                        } else if (MetaData[key]['in_outgoing_links']) {
+                            keyword_in_outgoing_links = 'True';
+                        }
+                    }
+                });
+            });
+            trendingKeywordsTwitter.push({'keyword': TwitterData[i]['results'][k]['name'], 'platform': 'Twitter', 'timestamp': TwitterData[i]['time'], 'malicious_urls': vtResults, 'keyword_in_content': keyword_in_content, 'keyword_in_metadata_description': keyword_in_metadata_description, 'keyword_in_outgoing_links': keyword_in_outgoing_links});
         }
     }
     return [trendingKeywordsGoogle, trendingKeywordsTwitter];
@@ -103,14 +131,48 @@ function compileIpInfo() {
     return countries;
 }
 
+function compileMaliciousHitsByDay(formattedData){
+    let timemap = {};
+    let entries = [["Date", 'Malicious Hits', 'Google Hits', 'Twitter Hits']];
+    formattedData.forEach(source => {
+        source.forEach(keyword => {
+            var day = keyword['timestamp'].split(" ")[0];
+            if(keyword['malicious_urls'].length > 0) {
+                if(day in timemap) {
+                    if(keyword['platform'] == 'Twitter') {
+                        timemap[day] = [timemap[day][0] + 1, timemap[day][1] + 1, timemap[day][2]];
+                    } else {
+                        timemap[day] = [timemap[day][0] + 1, timemap[day][1], timemap[day][2] + 1];
+                    }
+                } else {
+                    if(keyword['platform'] == 'Twitter') {
+                        timemap[day] = [1, 1, 0];
+                    } else {
+                        timemap[day] = [1, 0, 1];
+                    } 
+                }
+            }
+        });
+    });
+    Object.keys(timemap).forEach(key => {
+        entries.push([key, timemap[key][0], timemap[key][1], timemap[key][2]])
+    });
+    return(entries);
+}
+
 function App() {
     let [googleTrendingKeywords, twitterTrendingKeywords] = preprocessData();
+    let maliciousHitsByDay = compileMaliciousHitsByDay([googleTrendingKeywords, twitterTrendingKeywords]);
+    let options = {
+        title: "Malicious URL Hits Over Time",
+        curveType: "function",
+        legend: { position: "bottom" },
+      };
     let countries = compileIpInfo();
     let countrydata = [['Country', 'Malicious IP Hits']];
     for(const [key, value] of Object.entries(countries)) {
         countrydata.push([key, value])
     }
-    console.log(countrydata)
     return (
         <div className="App">
             <header className="App-header">
@@ -131,7 +193,6 @@ function App() {
                                     const selection = chart.getSelection();
                                     if (selection.length === 0) return;
                                     const region = countrydata[selection[0].row + 1];
-                                    console.log("Selected : " + region);
                                 },
                             },
                         ]}
@@ -139,10 +200,20 @@ function App() {
                         width="100%"
                         height="400px"
                         data={countrydata}
-                        mapsApiKey="AIzaSyDAV8XexOIHjguK2nHxQv1ihqjZUtexhNk"
+                        // mapsApiKey="AIzaSyDAV8XexOIHjguK2nHxQv1ihqjZUtexhNk"
                     />
                 </div>
                 {/*<MainBody></MainBody>*/}
+                <Divider>
+                    <Chip label="MALICIOUS URLS OVER TIME" />
+                </Divider>
+                <Chart
+                    chartType="LineChart"
+                    width="100%"
+                    height="400px"
+                    data={maliciousHitsByDay}
+                    options={options}
+                    />
             <div className={"App-body"}>
                 <Divider/>
                 <Divider>
@@ -152,12 +223,14 @@ function App() {
                     <TableContainer component={Paper} sx={{
                         height: 700
                     }}>
-                        <Table sx={{ minWidth: 650}} aria-label="simple table">
+                        <Table sx={{ minWidth: 400}} aria-label="simple table">
                             <TableHead>
                                 <TableRow>
-                                    <TableCell style={{backgroundColor: "#989fab"}}>Keyword</TableCell>
+                                    <TableCell style={{backgroundColor: "#989fab"}} align="right">Keyword</TableCell>
                                     <TableCell style={{backgroundColor: "#989fab"}} align="right">Time</TableCell>
-                                    <TableCell style={{backgroundColor: "#989fab"}} align="right">Platform</TableCell>
+                                    <TableCell style={{backgroundColor: "#989fab"}} align="right">In Page Content?</TableCell>
+                                    <TableCell style={{backgroundColor: "#989fab"}} align="right">In Metadata Description?</TableCell>
+                                    <TableCell style={{backgroundColor: "#989fab"}} align="right">In Outgoing Links?</TableCell>
                                 </TableRow>
                             </TableHead>
                             <TableBody>
@@ -170,9 +243,9 @@ function App() {
                                             {el.keyword}
                                         </TableCell>
                                         <TableCell align="right">{el.timestamp}</TableCell>
-                                        <TableCell align="right">{el.platform}</TableCell>
-
-
+                                        <TableCell align="right">{el.keyword_in_content}</TableCell>
+                                        <TableCell align="right">{el.keyword_in_metadata_description}</TableCell>
+                                        <TableCell align="right">{el.keyword_in_outgoing_links}</TableCell>
                                     </TableRow>
                                 )}
 
@@ -189,12 +262,14 @@ function App() {
                     <TableContainer component={Paper} sx={{
                         height: 700
                     }}>
-                        <Table sx={{ minWidth: 650}} aria-label="simple table">
+                        <Table sx={{ minWidth: 400}} aria-label="simple table">
                             <TableHead>
                                 <TableRow>
                                     <TableCell style={{backgroundColor: "#989fab"}}>Keyword</TableCell>
                                     <TableCell style={{backgroundColor: "#989fab"}} align="right">Time</TableCell>
-                                    <TableCell style={{backgroundColor: "#989fab"}} align="right">Platform</TableCell>
+                                    <TableCell style={{backgroundColor: "#989fab"}} align="right">In Page Content?</TableCell>
+                                    <TableCell style={{backgroundColor: "#989fab"}} align="right">Metadata Description?</TableCell>
+                                    <TableCell style={{backgroundColor: "#989fab"}} align="right">In Outgoing Links?</TableCell>
                                 </TableRow>
                             </TableHead>
                             <TableBody>
@@ -207,9 +282,9 @@ function App() {
                                             {el.keyword}
                                         </TableCell>
                                         <TableCell align="right">{el.timestamp}</TableCell>
-                                        <TableCell align="right">{el.platform}</TableCell>
-
-
+                                        <TableCell align="right">{el.keyword_in_content}</TableCell>
+                                        <TableCell align="right">{el.keyword_in_metadata_description}</TableCell>
+                                        <TableCell align="right">{el.keyword_in_outgoing_links}</TableCell>
                                     </TableRow>
                                 )}
 
