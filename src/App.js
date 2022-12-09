@@ -70,15 +70,15 @@ function preprocessData() {
         for(let k = 1; k < TwitterData[i]['results'].length; k++) {
             var [keyword_in_content, keyword_in_metadata_description, keyword_in_outgoing_links] = ['False', 'False', 'False'];
             let vtResults = [];
-            let GoogleTerm = TwitterData[i]['results'][k];
+            let TwitterTerm = TwitterData[i]['results'][k];
             for(let j = 1; j < Object.keys(VTData).length; j++) {
                 if(TwitterData[i]['_id'] === VTData[j]['origin']) {
                     for(const [key, value] of Object.entries(VTData[j]['results'])) {
-                        if(key.includes(GoogleTerm['name'])){
+                        if(key.includes(TwitterTerm['name'])){
                             if(value['suspicious'] > 0 || value['malicious'] > 0) {
                                 vtResults.push(value);
                                 Object.keys(MetaData).forEach(metadatakey => {
-                                    if(metadatakey.includes(GoogleTerm['name'])) {
+                                    if(metadatakey.includes(TwitterTerm['name'])) {
                                         if(MetaData[metadatakey]['in_page_source']) {
                                             keyword_in_content = 'True';
                                         } else if (MetaData[metadatakey]['in_metadata_description']) {
@@ -198,7 +198,7 @@ function App() {
                         width="100%"
                         height="400px"
                         data={countrydata}
-                        mapsApiKey="INSERT KEY HERE"
+                        mapsApiKey=""
                     />
                 </div>
                 {/*<MainBody></MainBody>*/}
